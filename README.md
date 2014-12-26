@@ -26,15 +26,16 @@ Fill those in to have access to Twitter API v1.1 Stream
 Running the application
 =======================
 
-Make sure you have MongoDB installed, then run this command to start your server
+Make sure you have MongoDB installed, then run this command to start your server instance.
 
 `mongod`
 
-Then run your app with options
+Then run your app with options.
 
 `node miner.js -d [database name] -f [search term(s)]`
 
 You must add a search term with the `-f` option.
+
 If you do not add `-d` option, "MineTwitter" is the default db name.
 
 `node miner.js --help` for a list of all options with usage and description.
