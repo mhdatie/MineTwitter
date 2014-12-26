@@ -1,3 +1,3 @@
 var tweetModel = require("./tweet.js");
 
-exports.User = tweetModel;
+exports.Tweet = tweetModel;
