@@ -1,7 +1,7 @@
 MineTwitter
 ===========
 
-Simple way to configure your Schema and obtain Tweets into your local Mongo database.
+Simple way to configure your Schema and scheduler from your CLI, and obtain tweets into your local Mongo database.
 
 Installation
 ============
@@ -32,11 +32,13 @@ Make sure you have MongoDB installed, then run this command to start your server
 
 Then run your app with options.
 
-`node miner.js -d [database name] -f [search term(s)]`
+`node miner.js -d [database name] -f [search term(s)] -l [languages]`
 
-You must add a search term with the `-f` option.
+`-d` option to speccify DB name. Default is **"MineTwitter"**.
 
-If you do not add `-d` option, "MineTwitter" is the default db name.
+`-f` option to specify a search term.
+
+`-l` option to specify a list (comma separated) of languages according to Twitter API and [ISO_639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards. Default is **all languages**.
 
 `node miner.js --help` for a list of all options with usage and description.
 
