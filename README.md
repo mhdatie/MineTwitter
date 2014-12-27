@@ -34,11 +34,11 @@ Then run your app with options.
 
 `node miner.js -d [database name] -f [search term(s)] -l [languages]`
 
-`-d` option to speccify DB name. Default is **"MineTwitter"**.
+`-d` option to specify DB name. Default is "MineTwitter".
 
 `-f` option to specify a search term.
 
-`-l` option to specify a list (comma separated) of languages according to Twitter API and [ISO_639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards. Default is **all languages**.
+`-l` option to specify a list (comma separated) of languages according to Twitter API and [ISO_639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards. Default is all languages.
 
 `node miner.js --help` for a list of all options with usage and description.
 
