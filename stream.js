@@ -1,18 +1,25 @@
 var mongoose = require('mongoose');
+var _ = require('underscore');
 var Tweet = mongoose.model('Tweet');
 
 module.exports = function(_config){
 
 	var _track = _config.track;
 	var _twit = _config.twit;
+	var _langs = _config.lang;
+
 	_twit.stream('filter', {track: _track}, function(stream) {
 			stream.on('data', function(_data){
 				//inspect the _data document with console.log(_data)
-			   if(!_data.retweeted_status){
-			   		newTweet(_data);
-				}else{
-					incrementTweet(_data.retweeted_status); //update retweet_count by referring to _data.id_str
-			   }
+				if(_langs.length == 0 || _.contains(_langs ,_data.lang)){
+					console.log('yes');
+					if(!_data.retweeted_status){
+			   			newTweet(_data);
+					}else{
+						//update retweet_count by referring to _data.id_str
+						incrementTweet(_data.retweeted_status); 
+			   		}
+				}
 
 			});
 			stream.on('error', function(err){

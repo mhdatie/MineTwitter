@@ -13,7 +13,10 @@ var twit = require('twitter')({
 var config = {
 	twit: twit,
 	db: '',
-	track: ''
+	track: '',
+	lang: '',
+	start: '',
+	end: ''
 };
 
 
