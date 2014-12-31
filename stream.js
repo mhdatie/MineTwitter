@@ -12,7 +12,6 @@ module.exports = function(_config){
 			stream.on('data', function(_data){
 				//inspect the _data document with console.log(_data)
 				if(_langs.length == 0 || _.contains(_langs ,_data.lang)){
-					console.log('yes');
 					if(!_data.retweeted_status){
 			   			newTweet(_data);
 					}else{

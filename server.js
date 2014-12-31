@@ -6,7 +6,7 @@ var models = require('./models');
 var app = express();
 var open = require('open');
 
-
+var schedule = require('node-schedule'); // our scheduler
 
 module.exports = function(_config){
 	//connect to mongodb and get Schema
@@ -23,10 +23,26 @@ module.exports = function(_config){
 		res.write("twitter auth required, go back.")
 	})
 
-	//start the stream
-	require('./stream.js')(_config);
+	//start the stream as scheduled
+	if(_config.start){
+		var start_date = _config.start;
+		var start_job = schedule.scheduleJob(start_date, function(){
+		    console.log('Stream started - ' + start_date);
+		    require('./stream.js')(_config);
+		});
 
-
+		if(_config.end){
+			var end_date = _config.end;
+			var end_job = schedule.scheduleJob(end_date, function(){
+			    start_job.cancel();
+			    console.log('Stream ended - ' + end_date);
+			    process.exit();
+			});
+		}
+	}else{ //or just start it
+		 require('./stream.js')(_config);
+	}
+	
 	//Todo: run with forever instead...
 	app.listen(3000, function(){
 		console.log("App listening on 3000...");
