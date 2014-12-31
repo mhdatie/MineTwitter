@@ -40,6 +40,8 @@ Then run your app with options.
 
 `-l` option to specify a list (comma separated) of languages according to Twitter API and [ISO_639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards. Default is all languages.
 
+`-s/-e` option to schedule a start/end date as a [Date(year,month,day,hour,minute,second,millis)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Example:_Two_digit_years_map_to_1900_-_1999) object (comma separated). Default is instant start of stream.
+
 `node miner.js --help` for a list of all options with usage and description.
 
 As soon as the server is running, your default browser will lauch to login to Twitter.
@@ -47,6 +49,31 @@ As soon as the server is running, your default browser will lauch to login to Tw
 Default: [http://localhost:3000/](http://localhost:3000/)
 
 That's it!
+
+Scheduler
+=========
+Here is an example of a sample run command:
+
+`node miner.js -d test -f "#newyear" -l en,ar -s 2014,11,31,1,20,0,0 -e 2015,0,2,0,46,10,0`
+
+Confirmation:
+
+    - Database name: "test"
+	- Capture: "#newyear"
+	- Languages: ["en","ar"]
+	- Starts: Wed Dec 31 2014 01:20:00 GMT-0500 (EST)
+	- Ends: Fri Jan 02 2015 00:46:10 GMT-0500 (EST)
+    Proceed with the above configurations? (y/n)
+
+**Notice that months is zero based**
+
+You are **not** allowed to:
+
+- Enter a start/end time smaller or equal to current time.
+- Enter an end date with no start date.
+- Enter an end date smaller than start date.
+
+If you do not specify start/end time(s), manual interaction will be required. 
 
 Default Tweet Schema
 ====================
@@ -70,7 +97,7 @@ The application will look for retweeted statuses in stream data and do the follo
 Todo
 ====
 
-- Set up a [scheduler](https://github.com/mattpat/node-schedule) (i.e: Start/End of Stream) from console.
+- Set up more [scheduler](https://github.com/mattpat/node-schedule) (i.e: Periodic mining) options from console.
 - Use [Forever](https://github.com/foreverjs/forever-monitor) programmatically to run application in the background.
 - Set up the Tweet Schema from within the console.
 - More options (i.e: Port #, Author Name, etc.)
