@@ -3,7 +3,7 @@ MineTwitter
 
 Simple way to configure your Schema and scheduler from your CLI, and obtain tweets into your local Mongo database.
 
-**P.S: If you are receiving a similar duplicate error on db.[collection].[$_id_], try running db.collection.dropIndexes() in a mongo instance.**
+**P.S: If you are receiving a similar duplicate error on `db.[collection].[$_id_]`, try running `db.collection.dropIndexes()` in a mongo instance.**
 
 Installation
 ============
