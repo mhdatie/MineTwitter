@@ -62,7 +62,7 @@ Sample Run:
 ###Confirmation:
 
 Saying `Yes` launches the program.
-Saying `No` will re-launch the questions.
+Saying `No` re-launches the questions.
 
 You are **not** allowed to:
 
