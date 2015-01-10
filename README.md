@@ -19,7 +19,7 @@ To install the required packages:
 
 `npm install`
 
-Head to Twitter for developers and create a new app. In `**./server/config.js**` you will notice:
+Head to Twitter for developers and create a new app. In `./server/config.js` you will notice:
 
     var client = require('twitter')({
 	    consumer_key: '',
