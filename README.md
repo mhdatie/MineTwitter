@@ -10,6 +10,7 @@ Latest Updates:
 
 - Converted from [commander](https://github.com/mattpat/commander) to [inquirer](https://github.com/SBoudrias/Inquirer.js) for the interface and user experience.
 - Updated the streaming functionality to reflect the [recent migration](https://github.com/desmondmorris/node-twitter#migrating-to-1x).
+- Organized file structure.
 
 Installation
 ============
@@ -18,7 +19,7 @@ To install the required packages:
 
 `npm install`
 
-Head to Twitter for developers and create a new app. In **config.js** you will notice:
+Head to Twitter for developers and create a new app. In `**./server/config.js**` you will notice:
 
     var client = require('twitter')({
 	    consumer_key: '',
