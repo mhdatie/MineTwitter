@@ -4,14 +4,6 @@ var server = require('./server/server.js');
 
 var helpers = require('./helpers/helperMethods.js');
 
-// if((!program.start && program.end) || ((program.start && program.end) && (Number(program.end) < Number(program.start)))){
-// 	console.log('	! Error: Check your date option(s)');
-// 	console.log('	- Starts: ' + program.start);
-// 	console.log('	- Ends: ' + program.end);
-
-// 	process.exit();
-// }
-
 var questions = [
 {
 	type: "input",
@@ -118,9 +110,17 @@ startQuestions();
 function startQuestions(){
 	cli.prompt(questions,function(answers){
 		if(answers.confirmation){
-			console.log('setting configurations..');
-			setConfiguration(answers);
-			server(config); //start app
+			console.log('setting configurations..\n');
+			if(((answers.start && answers.end) && (Number(answers.end) < Number(answers.start)))){
+				console.log('	! Error: Check your date option(s)');
+				console.log('	- Starts: ' + answers.start);
+				console.log('	- Ends: ' + answers.end);
+				console.log('\nGoing over the questions again.. >=[\n');
+				startQuestions();
+			}else{
+				setConfiguration(answers);
+				server(config); //start app
+			}
 		}else{
 			console.log('\nGoing over the questions again.. =[\n');
 			startQuestions();
