@@ -2,7 +2,7 @@
   "name": "MineTwitter",
   "version": "1.0.0",
   "description": "Mining Twitter into MongoDB Example",
-  "main": "server.js",
+  "main": "miner.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,9 +14,10 @@
   "author": "Mohamad Atieh",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.5.1",
     "cookies": "^0.5.0",
     "express": "^4.10.3",
+    "express-mongoose": "^0.1.0",
+    "inquirer": "^0.8.0",
     "mongoose": "^3.8.21",
     "node-schedule": "^0.1.13",
     "open": "0.0.5",

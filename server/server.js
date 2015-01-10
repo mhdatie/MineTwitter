@@ -1,19 +1,18 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var http = require('http');
-var models = require('./models');
-
+var models = require("../models");
 var app = express();
 var open = require('open');
 
 var schedule = require('node-schedule'); // our scheduler
 
-module.exports = function(_config){
+
+module.exports = function(config){
 	//connect to mongodb and get Schema
-	mongoose.connect('mongodb://localhost/'+_config.db);
+	mongoose.connect('mongodb://localhost/'+config.db);
 	
 	//--------------------
-	var twit = _config.twit;
+	var twit = config.twit;
 
 	app.get('/', twit.gatekeeper('/login'), function(req,res){
 		res.json({author:"Mohamad Atie"});
@@ -24,15 +23,15 @@ module.exports = function(_config){
 	})
 
 	//start the stream as scheduled
-	if(_config.start){
-		var start_date = _config.start;
+	if(config.start){
+		var start_date = config.start;
 		var start_job = schedule.scheduleJob(start_date, function(){
 		    console.log('Stream started - ' + start_date);
-		    require('./stream.js')(_config);
+		    require('./stream.js')(config);
 		});
 
-		if(_config.end){
-			var end_date = _config.end;
+		if(config.end){
+			var end_date = config.end;
 			var end_job = schedule.scheduleJob(end_date, function(){
 			    start_job.cancel();
 			    console.log('Stream ended - ' + end_date);
@@ -40,7 +39,7 @@ module.exports = function(_config){
 			});
 		}
 	}else{ //or just start it
-		 require('./stream.js')(_config);
+		 require('./stream.js')(config);
 	}
 	
 	//Todo: run with forever instead...
@@ -49,7 +48,7 @@ module.exports = function(_config){
 	})
 
 	//start default browser
-	open('http://localhost:3000');
+	//open('http://localhost:3000');
 
 	
 };

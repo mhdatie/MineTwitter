@@ -2,13 +2,13 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 var Tweet = mongoose.model('Tweet');
 
-module.exports = function(_config){
+module.exports = function(config){
 
-	var _track = _config.track;
-	var _twit = _config.twit;
-	var _langs = _config.lang;
+	var _track = config.track;
+	var _twit = config.twit;
+	var _langs = config.lang;
 
-	_twit.stream('filter', {track: _track}, function(stream) {
+	_twit.stream('statuses/filter', {track: _track}, function(stream) {
 			stream.on('data', function(_data){
 				//inspect the _data document with console.log(_data)
 				if(_langs.length == 0 || _.contains(_langs ,_data.lang)){

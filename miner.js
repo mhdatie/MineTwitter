@@ -1,105 +1,146 @@
-//runner
-var program = require('commander');
-var readline = require('readline');
-var config = require('./config.js').config;
-var tweet = require('./config.js').tweet;
-var server = require('./server.js');
+var cli = require('inquirer');
+var config = require('./server/config.js').config;
+var server = require('./server/server.js');
 
-var rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+var helpers = require('./helpers/helperMethods.js');
 
-//helper methods --- MUST BE MOVED TO HELPERS.JS--------------------------------------------------------------
+// if((!program.start && program.end) || ((program.start && program.end) && (Number(program.end) < Number(program.start)))){
+// 	console.log('	! Error: Check your date option(s)');
+// 	console.log('	- Starts: ' + program.start);
+// 	console.log('	- Ends: ' + program.end);
 
-if (!Function.prototype.constructDate) {
-        Function.prototype.constructDate = function(argArray) {
-            if (! Array.isArray(argArray)) {
-                throw new TypeError("Argument must be an array");
-            }
-            var constr = this;
-            var nullaryFunc = Function.prototype.bind.apply(
-                constr, [null].concat(argArray));
-            return new nullaryFunc();
-        };
-}
+// 	process.exit();
+// }
 
-function listLang(val) {
-	var arr = val.split(',');
-	for (i in arr){
-		if(arr[i].length < 2 || arr[i].length > 2){
-			console.log('	! Error: %j does not follow the "ISO 639-1" standard.', arr[i]);
-			process.exit();
+var questions = [
+{
+	type: "input",
+	name: "database",
+	message: "Mongo database name?",
+	default: 'MineTwitter'
+},
+{
+	type: "input",
+	name: "track",
+	message: "What are you mining for?",
+	default: '',
+	validate: function(answer){
+		if(answer === ''){
+			return "Please enter a valid search term.";
+		}else{
+			return true;
 		}
 	}
-	return arr;
-}
-
-function listTime(val){
-	var arr = val.split(',').map(Number);
-	if(arr.length >  Date.length || arr.length < 2){
-		console.log('	! Error: Arguments for the date must be between 2 & 7, given %j', arr.length); 
-		process.exit();
-	}
-	var date = Date.constructDate(arr);
-	var now = new Date();
-	if(Number(date) <= Number(now)){
-		console.log('	! Error: Pick some time in the future, given ' + date); 
-		process.exit();
-	}
-	return date;
-}
-//---------------------------------------------------------------------------------------------------------
-program
-  .version('0.0.1')
-  .option('-d, --database [name]', 'Add a database (default is "MineTwitter") [name]', 'MineTwitter')
-  .option('-f, --track [target]', 'Insert a tracker (hashtag/statement)')
-  .option('-l, --lang <targets>', 'Insert languages (comma separated)', listLang, [])
-  .option('-s, --start <date>', 'Schedule a starting date and time (comma separated)', listTime, 0)
-  .option('-e, --end <date>', 'Schedule an ending date and time (comma separated)', listTime, 0)
-  .parse(process.argv);
-
-if(!program.track){
-	console.log('\n	 -f / --track argument is missing');
-	console.log('	Type "node miner.js --help" for help\n');
-	process.exit();
-}
-
-if((!program.start && program.end) || ((program.start && program.end) && (Number(program.end) < Number(program.start)))){
-	console.log('	! Error: Check your date option(s)');
-	console.log('	- Starts: ' + program.start);
-	console.log('	- Ends: ' + program.end);
-
-	process.exit();
-}
-
-if (program.database && program.track){
-		console.log('	- Database name: %j', program.database);
-		console.log('	- Capture: %j', program.track);	
-
-		var lang = ((program.lang.length > 0) ? program.lang : 'any');
-		console.log('	- Languages: %j', lang);	
-
-		var start_time = ((program.start) ? program.start : 'not specified');
-		var end_time = ((program.end) ? program.end : 'not specified');
-		console.log('	- Starts: '+start_time);
-		console.log('	- Ends: '+end_time);
-
-		config.db = program.database;
-		config.track = program.track;
-		config.lang = program.lang;
-		config.start = program.start;
-		config.end = program.end;
-
-		rl.question("Proceed with the above configurations? (y/n) ", function(answer) {
-			if(answer == 'yes' || answer == 'y'){
-				console.log("Let the mining start!");
-				rl.close();
-				//start server
-				server(config);
-			}else{
-				rl.close();
-				process.exit();
+},
+{
+	type: "input",
+	name: "lang",
+	message: "Insert languages (comma separated)",
+	filter: function(val){ 
+		if (val.length == 0) {
+    		return val;
+		}else{
+			return helpers.listLang(val)
+		}
+	},
+	default: [],
+	validate: helpers.listLangValidation
+},
+{
+	type: "confirm",
+	name: "toBeStarted",
+	message: "Schedule a starting time?",
+	default: false
+},
+{
+	type: "confirm",
+	name: "toBeEnded",
+	message: "Schedule an ending time?",
+	default: false
+},
+{
+	type: "input",
+	name: "start",
+	message: "Schedule a starting date and time (comma seperated)",
+	filter: helpers.listTime,
+	default: false,
+	when: function( answers ) {
+		return (answers.toBeStarted);
+	},
+	validate: helpers.listTimeValidation
+},
+{
+	type: "input",
+	name: "end",
+	message: "Schedule an ending date and time (comma seperated)",
+	filter: helpers.listTime,
+	default: false,
+	when: function( answers ) {
+		return (answers.toBeEnded);
+	},
+	validate: helpers.listTimeValidation
+},
+{
+	type: "confirm",
+	name: "toUseDefaultSchema",
+	message: "Use the default schema?",
+	default: true
+},
+{
+	type: "checkbox",
+	name: "schema",
+	message: "Choose the fields you want to include in your schema:",
+	when: function( answers ) {
+		return (!answers.toUseDefaultSchema);
+	},
+	choices: [
+			{
+				name: "id",
+				checked: true
+			},
+			{
+				name: "verfied"
 			}
-		});
-}	
+	]
+},
+{
+	type: "confirm",
+	name: "confirmation",
+	message: "Proceed with the current configuration?",
+	default: true
+}
+];
+
+console.log("\n	- Welcome to MineTwitter =] \n");
+startQuestions();
+
+
+function startQuestions(){
+	cli.prompt(questions,function(answers){
+		if(answers.confirmation){
+			console.log('setting configurations..');
+			setConfiguration(answers);
+			server(config); //start app
+		}else{
+			console.log('\nGoing over the questions again.. =[\n');
+			startQuestions();
+		}
+	});
+}
+
+
+var setConfiguration = function(answers){
+	config.db = answers.database;
+	config.track = answers.track;
+	config.lang = answers.lang;
+	config.start = answers.start;
+	config.end = answers.end;
+
+	if(!answers.toUseDefaultSchema){
+		//create schema
+	 	config.defaultSchema = false;
+	 	//set to config.model
+	}
+	
+};
+
