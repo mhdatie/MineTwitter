@@ -48,7 +48,7 @@ module.exports = function(config){
 	})
 
 	//start default browser
-	//open('http://localhost:3000');
+	open('http://localhost:3000');
 
 	
 };
