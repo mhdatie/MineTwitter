@@ -45,7 +45,7 @@ Two things to take care of:
 
 - For filtering languages: A list (comma separated) of languages according to Twitter API and [ISO_639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standards. Example: `en,eu,ar,fr`.
 
-- For scheduling - [Date(year,month,day,hour,minute,second,millis)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Example:_Two_digit_years_map_to_1900_-_1999) object (comma separated).
+- For scheduling - A list  (comma separated) to create [Date(year,month,day,hour,minute,second,millis)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Example:_Two_digit_years_map_to_1900_-_1999) object. Example: `2015,01,22,15,0,0`.
 
 As soon as the server is running, your default browser will lauch to login to Twitter.
 
