@@ -37,7 +37,7 @@ Make sure you have MongoDB installed, then run this command to start your server
 
 `mongod`
 
-Then run your app with options.
+Then run your app.
 
 `node miner.js`
 
