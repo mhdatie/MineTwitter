@@ -56,10 +56,7 @@ That's it!
 Sample Run:
 =========
 
-![demo](http://oi57.tinypic.com/2dtqan9.jpg)
-
-
-###Confirmation:
+### Confirmation:
 
 Saying `Yes` launches the program.
 Saying `No` re-launches the questions.
